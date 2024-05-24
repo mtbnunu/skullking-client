@@ -2,4 +2,4 @@
 Works with mesh WebRTC with short term websocket for handshake.
 websocket is terminated by host when game starts, and by joiner as soon as connection is created.
 
-[Live Here](https://skk.games.jaeb.ae/)
+[Live Here](https://sks.games.jaeb.ae/)
