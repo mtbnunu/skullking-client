@@ -15,16 +15,18 @@ export const useScorecard = () => {
     const diff = Math.abs(winnings - bet!);
 
     if (diff === 0) {
+      //win
       if (bet === 0) {
-        return round * 2;
+        return round * 10;
       } else {
-        return round;
+        return bet * 20;
       }
     } else {
+      //lose
       if (bet === 0) {
-        return round * -2;
+        return round * -10;
       } else {
-        return -diff!;
+        return diff * -10;
       }
     }
   };
