@@ -1,0 +1,26 @@
+{
+  "name": "skullking-client",
+  "author": "Jae Bae",
+  "repository": "https://github.com/mtbnunu/skullking-client",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@mdi/font": "^7.4.47",
+    "nuxt": "^3.11.2",
+    "typescript": "^5.4.5",
+    "vue": "^3.4.27",
+    "vue-router": "^4.3.2"
+  },
+  "devDependencies": {
+    "vite-plugin-vuetify": "^2.0.3",
+    "vuetify": "^3.6.7"
+  }
+}
