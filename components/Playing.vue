@@ -36,7 +36,7 @@ const scorePhase = () => {
 }
 
 const endCycle = () => {
-  if (round.value < 3) {
+  if (round.value < 10) {
     round.value++;
     phase.value = "announceround"
   } else {
