@@ -442,10 +442,10 @@ const processIceCandidates = (connectionId: string) => {
 };
 
 const pageLeaveWarning = (e: any) => {
-  // e.preventDefault();
-  // e.returnValue = "";
-  // // For some browsers, returnValue needs to be set explicitly.
-  // return "";
+  e.preventDefault();
+  e.returnValue = "";
+  // For some browsers, returnValue needs to be set explicitly.
+  return "";
 };
 
 const startWebRTC = async (
