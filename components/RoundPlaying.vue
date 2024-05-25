@@ -60,27 +60,18 @@ const props = defineProps<{
   round: number
 }>()
 const emit = defineEmits(['done'])
-const { broadcast, onData, useDataListener, isHost, peerConnections, myId } = useConnectionHandler();
-const { scorecard, updateBet, getReadyStatus, getBetValue } = useScorecard()
-const { me, users } = useProfile()
-const { open } = useSnackbar()
+const { peerConnections, myId } = useConnectionHandler();
+const { getReadyStatus, getBetValue } = useScorecard()
+const { users } = useProfile()
 
 const tab = ref()
 
-const peers = computed(() => {
-  return Object.keys(peerConnections.value).map(p => {
-    return {
-      id: p,
-      profile: users.value[p]
-    }
-  })
-})
 
 
-const { concur, unconcur, selfState, getStatusById, concurredState } = useConcur({
+const { concur, unconcur, concurredState } = useConcur({
   id: `endRound-${props.round}`, onAgree: () => {
     emit('done')
-  }, gracePeriodMessage: `Round ${props.round} Ended`
+  }, gracePeriodMessage: `Round ${props.round} Ended`, quorum: 2
 })
 
 

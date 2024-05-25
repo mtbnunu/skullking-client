@@ -7,11 +7,9 @@
     <ConcurCountdown />
 
     <v-snackbar v-model="snackbar" :timeout="timeout">
-      <p v-for="text in texts" :key="text">
-        {{ text }}
-      </p>
+      {{ text }}
       <template v-slot:actions>
-        <v-btn color="blue" variant="text" @click="hasErr = false">
+        <v-btn color="blue" variant="text" @click="snackbar = false">
           Close
         </v-btn>
       </template>
@@ -24,7 +22,7 @@ import { useStateMachine } from "./composables/useStateMachine"
 import { useSnackbar } from "./composables/useSnackbar"
 import ConcurCountdown from "./components/ConcurCountdown.vue";
 const { current } = useStateMachine()
-const { snackbar, texts, timeout } = useSnackbar()
+const { snackbar, text, timeout } = useSnackbar()
 
 
 useHead({
@@ -45,5 +43,8 @@ useHead({
 
 .container {
   min-width: 350px;
+}
+.v-snackbar__wrapper {
+  bottom: 120px;
 }
 </style>

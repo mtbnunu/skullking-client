@@ -44,9 +44,7 @@ const props = defineProps<{
   round: number
 }>()
 const emit = defineEmits(['done'])
-const { broadcast, onData, useDataListener, isHost, peerConnections, myId } = useConnectionHandler();
-const { scorecard, updateBet, getReadyStatus, getBetValue } = useScorecard()
-const { open } = useSnackbar()
+const { updateBet, getReadyStatus } = useScorecard()
 
 const { concur, unconcur, } = useConcur<{ bet: number, round: number }, { round: number }>({
   id: `bet-${props.round}`,

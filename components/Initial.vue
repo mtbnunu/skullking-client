@@ -76,7 +76,7 @@ const join = async () => {
 
     goto('waiting')
   } catch (e) {
-    open(e.message)
+    open("Failed to join")
     loading.value = false;
     return true;
   }

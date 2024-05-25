@@ -90,7 +90,7 @@ const { open } = useSnackbar()
 const shareLink = computed(() => `${window.location.protocol}//${window.location.host}/${roomId.value}`)
 const qrCodeUrl = computed(() => `https://quickchart.io/qr?text=${encodeURIComponent(shareLink.value)}&ecLevel=L&margin=2&size=200&format=svg`)
 
-const select = (e) => {
+const select = (e: any) => {
   e.target.select()
   document.execCommand("copy");
   open('Copied to clipboard')

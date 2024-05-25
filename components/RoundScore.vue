@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="editDialog" max-width="600">
-    <v-card prepend-icon="mdi-hand-coin" title="What was your score?">
+    <v-card prepend-icon="mdi-hand-coin" title="What was the score?">
       <v-card-text>
         <div class="d-flex ga-2 align-center flex-wrap justify-space-evenly pa-4">
           <v-btn v-for="(_, i) in round + 1" :variant="editScore === i ? 'tonal' : 'outlined'" size="large"
@@ -83,9 +83,8 @@ const props = defineProps<{
   round: number
 }>()
 const emit = defineEmits(['done'])
-const { broadcast, onData, useDataListener, isHost, peerConnections, myId } = useConnectionHandler();
-const { scorecard, updateWinnings, getBetValue, getWinningsValue, getDiff, getScoreById } = useScorecard()
-const { open } = useSnackbar()
+const { broadcast, useDataListener, myId } = useConnectionHandler();
+const { updateWinnings, getBetValue, getWinningsValue, getDiff, getScoreById } = useScorecard()
 const { me, users } = useProfile()
 
 const everyone = computed(() => ({ [myId.value!]: me.value, ...users.value }))
@@ -141,6 +140,9 @@ const { concur, unconcur, concurredState } = useConcur({
 useDataListener('setscore', (d) => {
   console.log("setscore", d)
   if (d.round === props.round) {
+    if (d.id === editFor.value) {
+      editDialog.value = false
+    }
     if (getWinningsValue(d.id, d.round) !== d.score) {
       updateWinnings(d.id, d.round, d.score)
       unconcur()

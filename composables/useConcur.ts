@@ -8,6 +8,7 @@ export const useConcur = <T = void, U = void>(options: {
   onUnconcur?: (d: { sourceId: string; data: U }) => void;
   gradePeriodSeconds?: number;
   gracePeriodMessage?: string;
+  quorum?: number;
 }) => {
   message.value = options.gracePeriodMessage;
 
@@ -16,18 +17,30 @@ export const useConcur = <T = void, U = void>(options: {
 
   const concurredList = ref<{ [id: string]: boolean }>({});
 
+  const requiredVotes = computed(
+    () => options.quorum || Object.keys(peerConnections.value).length + 1
+  );
+
+  const quorumMet = () => {
+    console.log(
+      "required ",
+      requiredVotes.value,
+      concurredList.value,
+      Object.values(concurredList.value).filter((x) => x === true).length
+    );
+    return (
+      Object.values(concurredList.value).filter((x) => x === true).length >=
+      requiredVotes.value
+    );
+  };
+
   useDataListener("concur", (d) => {
     if (d.id === options.id) {
       options.onConcur?.(d);
       concurredList.value[d.sourceId] = true;
 
-      if (concurredList.value[myId.value!]) {
-        console.log("1", { allkeys: Object.keys(peerConnections.value) });
-        if (
-          Object.keys(peerConnections.value).every(
-            (id) => concurredList.value[id]
-          )
-        ) {
+      if (quorumMet()) {
+        {
           console.log("2");
           startGracePeriod();
         }
@@ -39,7 +52,9 @@ export const useConcur = <T = void, U = void>(options: {
     if (d.id === options.id) {
       options.onUnconcur?.(d);
       concurredList.value[d.sourceId] = false;
-      cancelGracePeriod();
+      if (!quorumMet()) {
+        cancelGracePeriod();
+      }
     }
   });
 
