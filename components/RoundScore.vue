@@ -62,10 +62,10 @@
 
   <ConcurButton :concur="concur" :unconcur="unconcur" :concurredState="concurredState" v-if="round === totalWinnings">
     <template v-slot:concur>
-      Agree
+      Agree ({{ votedCount }} / {{ Object.keys(everyone).length }})
     </template>
     <template v-slot:unconcur>
-      Hold on
+      Cancel Agree ({{ votedCount }} / {{ Object.keys(everyone).length }})
     </template>
   </ConcurButton>
   <div class="pa-4" v-else>
@@ -85,9 +85,7 @@ const props = defineProps<{
 const emit = defineEmits(['done'])
 const { broadcast, useDataListener, myId } = useConnectionHandler();
 const { updateWinnings, getBetValue, getWinningsValue, getDiff, getScoreById } = useScorecard()
-const { me, users } = useProfile()
-
-const everyone = computed(() => ({ [myId.value!]: me.value, ...users.value }))
+const { me, users, everyone } = useProfile()
 
 const shake = ref<{ [key: string]: boolean }>({})
 const attention = ref<{ [key: string]: Set<string> }>({})
@@ -130,7 +128,7 @@ const getCumulativeScore = (id: string) => {
   }, 0)
 }
 
-const { concur, unconcur, concurredState } = useConcur({
+const { concur, unconcur, concurredState, votedCount } = useConcur({
   id: `score-${props.round}`,
   onAgree: () => {
     emit("done")

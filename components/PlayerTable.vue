@@ -12,12 +12,8 @@
 <script setup lang="ts">
 
 
-const { me, users } = useProfile()
+const { me, users, everyone } = useProfile()
 const { peerConnections, myId } = useConnectionHandler();
-
-const everyone = computed(() => {
-  return [{ profile: me.value, id: myId.value }, ...peers.value]
-})
 
 const peers = computed(() => {
   return Object.keys(peerConnections.value).map(p => {

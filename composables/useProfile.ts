@@ -202,13 +202,14 @@ if (fromstorage) {
 const editing = ref(false);
 
 export const useProfile = () => {
-  const { broadcast } = useConnectionHandler();
+  const { broadcast, myId } = useConnectionHandler();
 
   return {
     me: computed(() => me.value),
     users: computed(() => users.value),
     editing,
     animals,
+    everyone: computed(() => ({ [myId.value!]: me.value, ...users.value })),
     getMyProfile() {
       return me.value;
     },

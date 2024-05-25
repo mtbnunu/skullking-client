@@ -21,7 +21,7 @@
 import { useStateMachine } from "./composables/useStateMachine"
 import { useSnackbar } from "./composables/useSnackbar"
 import ConcurCountdown from "./components/ConcurCountdown.vue";
-const { current } = useStateMachine()
+const { current, currentStateName } = useStateMachine()
 const { snackbar, text, timeout } = useSnackbar()
 
 

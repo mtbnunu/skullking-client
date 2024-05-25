@@ -23,7 +23,7 @@
             </div>
             <div class="center mt4">
               {{ Object.entries(peerConnections).length + 1 }} player{{ !!Object.entries(peerConnections).length ? 's' :
-      ''
+  ''
               }} in
               the
               room
@@ -55,10 +55,10 @@
   <ConcurButton :concur="concur" :unconcur="unconcur" :concurredState="concurredState"
     v-if="!!Object.entries(peerConnections).length">
     <template v-slot:concur>
-      Ready
+      Ready ({{ votedCount }} / {{ Object.keys(everyone).length }})
     </template>
     <template v-slot:unconcur>
-      Cancel Ready
+      Cancel Ready ({{ votedCount }} / {{ Object.keys(everyone).length }})
     </template>
   </ConcurButton>
 
@@ -71,9 +71,17 @@
 <script setup lang="ts">
 
 import { useProfile } from "../composables/useProfile"
-const { openEditProfile } = useProfile()
+const { openEditProfile, everyone } = useProfile()
 const { roomId, peerConnections, isHost, closeRoom, onConnected, send } = useConnectionHandler();
 const { goto } = useStateMachine()
+
+const router = useRouter()
+
+watch(() => roomId.value, () => {
+  window.history.replaceState(null, '', roomId.value);
+  // router.replace(roomId.value || '')
+
+}, { immediate: true })
 
 const tab = ref(isHost ? "room" : "player")
 watch(isHost, (n, o) => {
@@ -96,7 +104,7 @@ const select = (e: any) => {
   open('Copied to clipboard')
 }
 
-const { concur, unconcur, selfState, getStatusById, concurredState } = useConcur({
+const { concur, unconcur, selfState, getStatusById, concurredState, votedCount } = useConcur({
   id: 'startgame', onAgree: () => {
     if (isHost) {
       closeRoom()

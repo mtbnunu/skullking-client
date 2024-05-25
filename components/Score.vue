@@ -51,9 +51,7 @@
 
 const { scorecard, getScore } = useScorecard()
 const { myId } = useConnectionHandler();
-const { me, users } = useProfile()
-
-const everyone = computed(() => ({ [myId.value!]: me.value, ...users.value }))
+const { me, users, everyone } = useProfile()
 
 const tab = ref()
 

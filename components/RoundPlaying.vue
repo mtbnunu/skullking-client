@@ -22,6 +22,10 @@
           <template v-slot:append="{ id }">
             <v-fade-transition>
               <div>
+                <v-chip prepend-icon="mdi-circle-multiple" class="text-h6 mr-2"
+                  :color="leadingPlayer.id === id ? 'primary' : 'default'" v-if="round > 1">
+                  {{ cumulativeScores[id!] }}
+                </v-chip>
                 <v-chip v-if="getReadyStatus(id, round)" prepend-icon="mdi-hand-coin" size="large" class="text-h6">
                   {{ getBetValue(id, round) }}
                 </v-chip>
@@ -38,7 +42,7 @@
 
   <ConcurButton :concur="concur" :unconcur="unconcur" :concurredState="concurredState">
     <template v-slot:concur>
-      Round Ended
+      Round Ended ({{ votedCount }}/2)
     </template>
     <template v-slot:unconcur>
       Nevermind
@@ -61,14 +65,34 @@ const props = defineProps<{
 }>()
 const emit = defineEmits(['done'])
 const { peerConnections, myId } = useConnectionHandler();
-const { getReadyStatus, getBetValue } = useScorecard()
-const { users } = useProfile()
+const { getReadyStatus, getBetValue, getScoreById } = useScorecard()
+const { users, everyone } = useProfile()
 
 const tab = ref()
 
+const leadingPlayer = computed(() => {
+  return Object.entries(cumulativeScores.value).reduce((a, [id, score]) => {
+    if (!a.id) {
+      return { id, score }
+    }
+    if (a.score > score) {
+      return a
+    }
+    return { id, score }
+  }, { id: '', score: Number.MIN_SAFE_INTEGER })
+})
 
 
-const { concur, unconcur, concurredState } = useConcur({
+const cumulativeScores = computed(() => {
+  return Object.keys(everyone.value).reduce((a, id) => {
+    a[id] = Array.from({ length: props.round - 1 }, (_, i) => i + 1).reduce((a, c) => {
+      return a + getScoreById(id, c)!
+    }, 0)
+    return a;
+  }, {} as { [key: string]: number });
+})
+
+const { concur, unconcur, concurredState, votedCount } = useConcur({
   id: `endRound-${props.round}`, onAgree: () => {
     emit('done')
   }, gracePeriodMessage: `Round ${props.round} Ended`, quorum: 2

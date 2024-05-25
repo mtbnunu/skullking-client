@@ -10,6 +10,7 @@ export const useConcur = <T = void, U = void>(options: {
   gracePeriodMessage?: string;
   quorum?: number;
 }) => {
+
   message.value = options.gracePeriodMessage;
 
   const { broadcast, useDataListener, myId, peerConnections, isHost } =
@@ -114,6 +115,10 @@ export const useConcur = <T = void, U = void>(options: {
     concurredState: computed(() => concurredList.value),
     selfState: computed(() => concurredList.value[myId.value!]),
     getStatusById: (id: string) => concurredList.value[id],
+    votedCount: computed(() => {
+      return Object.entries(concurredList.value).filter(([id, val]) => val)
+        .length;
+    }),
     concur: (data: T) => {
       broadcast({ action: "concur", id: options.id, data });
     },
