@@ -60,7 +60,7 @@
     </PlayerList>
   </v-card-text>
 
-  <ConcurButton :concur="concur" :unconcur="unconcur" :concurredState="concurredState">
+  <ConcurButton :concur="concur" :unconcur="unconcur" :concurredState="concurredState" v-if="round === totalWinnings">
     <template v-slot:concur>
       Agree
     </template>
@@ -68,6 +68,12 @@
       Hold on
     </template>
   </ConcurButton>
+  <div class="pa-4" v-else>
+    <v-btn color="danger" variant="tonal" :disabled="true" block size="large">
+      Check again
+    </v-btn>
+  </div>
+
 
 </template>
 
@@ -92,6 +98,13 @@ const attentionArr = computed(() => {
     a[k] = Array.from(v)
     return a;
   }, {} as { [key: string]: Array<string> })
+})
+
+const totalWinnings = computed(() => {
+  return Object.keys(everyone.value).reduce((a, c) => {
+    console.log(a, c)
+    return a + getWinningsValue(c, props.round)
+  }, 0)
 })
 
 const callAttention = (id: string, from: string) => {

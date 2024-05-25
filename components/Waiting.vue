@@ -22,7 +22,11 @@
                 label="Direct Link" variant="outlined" @click="select"></v-text-field>
             </div>
             <div class="center mt4">
-              {{ Object.entries(peerConnections).length + 1 }} person in the room
+              {{ Object.entries(peerConnections).length + 1 }} player{{ !!Object.entries(peerConnections).length ? 's' :
+      ''
+              }} in
+              the
+              room
             </div>
           </div>
         </div>
@@ -48,7 +52,8 @@
 
 
 
-  <ConcurButton :concur="concur" :unconcur="unconcur" :concurredState="concurredState">
+  <ConcurButton :concur="concur" :unconcur="unconcur" :concurredState="concurredState"
+    v-if="!!Object.entries(peerConnections).length">
     <template v-slot:concur>
       Ready
     </template>

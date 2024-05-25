@@ -32,6 +32,10 @@
 
       </v-btn>
 
+      <div class="muted center mt-12 small">
+        2024. Jae Bae
+        <br> hi@jaeb.ae
+      </div>
     </div>
   </div>
 </template>
@@ -115,5 +119,8 @@ h1 {
   input {
     text-align: center;
   }
+}
+.small {
+  font-size: 0.7em;
 }
 </style>
