@@ -1,9 +1,7 @@
 import { ref, onUnmounted } from "vue";
 import { useProfile } from "./useProfile";
 
-const signalServer =
-  // "wss://urmdrodnf9.execute-api.us-east-1.amazonaws.com/dev/";
-  "wss://wrtc.api.jaeb.ae/";
+const signalServer = "wss://wrtc.api.jaeb.ae/";
 
 const appId = "skk";
 
