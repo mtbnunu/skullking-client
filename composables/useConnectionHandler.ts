@@ -485,10 +485,6 @@ const startWebRTC = async (
       console.log(
         "ICE connection state is connected, closing WebSocket connection"
       );
-
-      if (!isHost.value) {
-        closeWebsocket();
-      }
     }
   };
 
@@ -499,9 +495,6 @@ const startWebRTC = async (
         "Peer connection is fully connected.",
         (peerConnection as ExtendedPeerConnection).id
       );
-      if (!isHost.value) {
-        closeWebsocket();
-      }
     } else if (peerConnection.connectionState === "failed") {
       console.error("Peer connection failed.");
     }
