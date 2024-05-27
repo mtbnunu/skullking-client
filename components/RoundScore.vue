@@ -60,7 +60,8 @@
     </PlayerList>
   </v-card-text>
 
-  <ConcurButton :concur="concur" :unconcur="unconcur" :concurredState="concurredState" v-if="round === totalWinnings">
+  <ConcurButton :concur="concur" :unconcur="unconcur" :concurredState="concurredState"
+    v-if="ignoreWarning || round === totalWinnings">
     <template v-slot:concur>
       Agree ({{ votedCount }} / {{ Object.keys(everyone).length }})
     </template>
@@ -69,7 +70,7 @@
     </template>
   </ConcurButton>
   <div class="pa-4" v-else>
-    <v-btn color="danger" variant="tonal" :disabled="true" block size="large">
+    <v-btn color="danger" variant="tonal" block size="large" @click="whyCheckAgain">
       Check again
     </v-btn>
   </div>
@@ -96,6 +97,17 @@ const attentionArr = computed(() => {
     return a;
   }, {} as { [key: string]: Array<string> })
 })
+
+const ignoreWarning = ref(false)
+
+const whyCheckAgain = () => {
+  if (
+    confirm(
+      `Total winnings from everyone (${totalWinnings.value}) should equal current round (${props.round}).\n
+Do you want to ignore and proceed?`)) {
+    ignoreWarning.value = true
+  }
+}
 
 const totalWinnings = computed(() => {
   return Object.keys(everyone.value).reduce((a, c) => {
